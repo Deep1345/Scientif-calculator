@@ -1,5 +1,5 @@
 # Scientific Calculator (C++)
-
+# Author: Deep Patel
 ## Project Overview
 This project demonstrates a simple Scientific Calculator built using C++.  
 It is integrated with DevOps tools including **GitHub, Jenkins, Docker, and Ansible**.
