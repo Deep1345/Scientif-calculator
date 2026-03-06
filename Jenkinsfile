@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout scm
@@ -12,6 +11,7 @@ pipeline {
         stage('Build with CMake') {
             steps {
                 sh '''
+                rm -rf build
                 mkdir build
                 cd build
                 cmake ..
@@ -20,32 +20,13 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
+        stage('Run Google Tests') {
             steps {
                 sh '''
                 cd build
                 ./runTests
                 '''
             }
-        }
-
-    }
-
-    post {
-        success {
-            emailext(
-                subject: "Build SUCCESS",
-                body: "Build and tests passed",
-                to: "your_email@gmail.com"
-            )
-        }
-
-        failure {
-            emailext(
-                subject: "Build FAILED",
-                body: "Build or tests failed",
-                to: "your_email@gmail.com"
-            )
         }
     }
 }
