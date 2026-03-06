@@ -1,4 +1,3 @@
-
 pipeline {
     agent any
 
@@ -10,31 +9,43 @@ pipeline {
             }
         }
 
-        stage('Build C++') {
+        stage('Build with CMake') {
             steps {
-                sh 'g++ calculator.cpp -o calculator'
+                sh '''
+                mkdir build
+                cd build
+                cmake ..
+                make
+                '''
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh '''
+                cd build
+                ./runTests
+                '''
             }
         }
 
     }
 
     post {
-
         success {
             emailext(
-                subject: "Jenkins Build SUCCESS",
-                body: "Good news! The Jenkins build completed successfully.",
-                to: "your-email@gmail.com"
+                subject: "Build SUCCESS",
+                body: "Build and tests passed",
+                to: "your_email@gmail.com"
             )
         }
 
         failure {
             emailext(
-                subject: "Jenkins Build FAILED",
-                body: "Attention! The Jenkins build has failed. Please check Jenkins.",
-                to: "pateldeepvi@gmail.com"
+                subject: "Build FAILED",
+                body: "Build or tests failed",
+                to: "your_email@gmail.com"
             )
         }
-
     }
 }
